@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>宗教動態貼圖館 - 佛心常在·慈悲分享</title>
+    <meta name="description" content="精美的宗教動態GIF貼圖館，包含各種佛教咒語和佛號系列，透明背景，適合社群媒體分享。">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .gradient-text {
+            background: linear-gradient(to right, #d97706, #ea580c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .work-card {
+            transition: all 0.3s ease;
+        }
+        .work-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
+        }
+        .format-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .format-gif {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+        .format-webp {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+        .smart-badge {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+        }
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #f59e0b;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .github-sync {
+            background: linear-gradient(135deg, #24292e, #586069);
+            color: white;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-red-50">
+    <!-- 頂部導航 -->
+    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-amber-200">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center text-white text-xl font-bold">
+                        🧘
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold gradient-text">
+                            宗教動態貼圖館
+                        </h1>
+                        <p class="text-sm text-amber-600">佛心常在·慈悲分享</p>
+                    </div>
+                </div>
+                <div class="px-3 py-1 bg-amber-100 text-amber-700 border border-amber-300 rounded-full text-sm">
+                    ✨ 智能展示版
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主要內容 -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- 分類導航 -->
+        <div class="flex flex-wrap justify-center gap-3 mb-8">
+            <button onclick="filterWorks('all')" id="btn-all" class="category-btn active px-4 py-2 rounded-lg transition-all duration-300 bg-gradient-to-r from-amber-500 to-orange-500 text-white">
+                <span class="mr-2">🎭</span>
+                全部作品
+                <span class="ml-2 px-2 py-1 bg-white/20 rounded-full text-xs" id="count-all">0</span>
+            </button>
+            <button onclick="filterWorks('mantra')" id="btn-mantra" class="category-btn px-4 py-2 rounded-lg transition-all duration-300 bg-white/70 hover:bg-amber-50 border border-amber-200">
+                <span class="mr-2">📿</span>
+                咒語系列
+                <span class="ml-2 px-2 py-1 bg-amber-100 text-amber-700 rounded-full text-xs" id="count-mantra">0</span>
+            </button>
+            <button onclick="filterWorks('buddha')" id="btn-buddha" class="category-btn px-4 py-2 rounded-lg transition-all duration-300 bg-white/70 hover:bg-amber-50 border border-amber-200">
+                <span class="mr-2">🙏</span>
+                佛號系列
+                <span class="ml-2 px-2 py-1 bg-amber-100 text-amber-700 rounded-full text-xs" id="count-buddha">0</span>
+            </button>
+            <button onclick="filterWorks('coming')" id="btn-coming" class="category-btn px-4 py-2 rounded-lg transition-all duration-300 bg-white/70 hover:bg-amber-50 border border-amber-200">
+                <span class="mr-2">✨</span>
+                即將推出
+                <span class="ml-2 px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-xs">∞</span>
+            </button>
+        </div>
+
+        <!-- 作品展示區域 -->
+        <section id="works-section" class="mb-12">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold gradient-text mb-2">
+                    精選作品集
+                </h2>
+                <p class="text-amber-700">
+                    每個作品都經過精心設計，保留完美細節，適合社群媒體分享
+                </p>
+                
+                <!-- GitHub同步狀態 -->
+                <div id="sync-status" class="mt-4 inline-flex items-center px-4 py-2 rounded-lg text-sm hidden">
+                    <i class="fab fa-github mr-2"></i>
+                    <span id="sync-text">正在從GitHub載入最新作品...</span>
+                    <div class="loading-spinner ml-2"></div>
+                </div>
+            </div>
+
+            <!-- 載入狀態 -->
+            <div id="loading-state" class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                <!-- 骨架屏載入動畫 -->
+                <div class="work-card bg-white rounded-2xl p-6 shadow-lg">
+                    <div class="skeleton h-48 rounded-xl mb-4"></div>
+                    <div class="skeleton h-6 rounded mb-2"></div>
+                    <div class="skeleton h-4 rounded w-3/4 mb-4"></div>
+                    <div class="flex gap-2 mb-4">
+                        <div class="skeleton h-6 w-16 rounded-full"></div>
+                        <div class="skeleton h-6 w-20 rounded-full"></div>
+                    </div>
+                    <div class="skeleton h-10 rounded-lg"></div>
+                </div>
+                <div class="work-card bg-white rounded-2xl p-6 shadow-lg">
+                    <div class="skeleton h-48 rounded-xl mb-4"></div>
+                    <div class="skeleton h-6 rounded mb-2"></div>
+                    <div class="skeleton h-4 rounded w-3/4 mb-4"></div>
+                    <div class="flex gap-2 mb-4">
+                        <div class="skeleton h-6 w-16 rounded-full"></div>
+                        <div class="skeleton h-6 w-20 rounded-full"></div>
+                    </div>
+                    <div class="skeleton h-10 rounded-lg"></div>
+                </div>
+            </div>
+
+            <!-- 作品列表 -->
+            <div id="works-container" class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto hidden">
+                <!-- 作品將在這裡動態載入 -->
+            </div>
+
+            <!-- 空狀態 -->
+            <div id="empty-state" class="text-center py-12 hidden">
+                <div class="text-6xl mb-4">🙏</div>
+                <h3 class="text-xl font-semibold text-amber-700 mb-2">暫無作品</h3>
+                <p class="text-amber-600 mb-4">請使用後台管理系統上傳您的宗教動態貼圖作品</p>
+                <a href="/admin.html" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-lg hover:from-amber-600 hover:to-orange-600 transition-colors">
+                    <i class="fas fa-cog mr-2"></i>
+                    進入後台管理
+                </a>
+            </div>
+
+            <!-- 錯誤狀態 -->
+            <div id="error-state" class="text-center py-12 hidden">
+                <div class="text-6xl mb-4">⚠️</div>
+                <h3 class="text-xl font-semibold text-red-700 mb-2">載入失敗</h3>
+                <p class="text-red-600 mb-4" id="error-message">無法載入作品數據，請稍後重試</p>
+                <button onclick="loadWorks()" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-red-500 to-pink-500 text-white rounded-lg hover:from-red-600 hover:to-pink-600 transition-colors">
+                    <i class="fas fa-redo mr-2"></i>
+                    重新載入
+                </button>
+            </div>
+        </section>
+
+        <!-- 即將推出區域 -->
+        <section id="coming-section" class="mb-12 hidden">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
+                    即將推出 ✨
+                </h2>
+                <p class="text-purple-700">
+                    更多精彩的宗教動態貼圖正在創作中，敬請期待！
+                </p>
+            </div>
+        </section>
+
+        <!-- 智能技術特色 -->
+        <section class="mb-12">
+            <div class="bg-gradient-to-r from-amber-100 to-orange-100 rounded-2xl p-8">
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl font-bold text-amber-800 mb-2">
+                        🚀 智能技術特色
+                    </h2>
+                    <p class="text-amber-700">採用最新Web技術，提供極致用戶體驗</p>
+                </div>
+                
+                <div class="grid md:grid-cols-4 gap-6">
+                    <div class="text-center space-y-2">
+                        <div class="w-12 h-12 mx-auto bg-blue-200 rounded-full flex items-center justify-center text-blue-700 text-xl">
+                            ⚡
+                        </div>
+                        <h3 class="font-semibold text-amber-800">雙格式智能</h3>
+                        <p class="text-sm text-amber-700">WebP加速載入，GIF保留透明效果</p>
+                    </div>
+                    <div class="text-center space-y-2">
+                        <div class="w-12 h-12 mx-auto bg-purple-200 rounded-full flex items-center justify-center text-purple-700 text-xl">
+                            🤖
+                        </div>
+                        <h3 class="font-semibold text-amber-800">AI智能標籤</h3>
+                        <p class="text-sm text-amber-700">智能分析內容，自動推薦相關標籤</p>
+                    </div>
+                    <div class="text-center space-y-2">
+                        <div class="w-12 h-12 mx-auto bg-amber-200 rounded-full flex items-center justify-center text-amber-700 text-xl">
+                            💎
+                        </div>
+                        <h3 class="font-semibold text-amber-800">完美透明背景</h3>
+                        <p class="text-sm text-amber-700">專業級透明處理，適合所有社群平台</p>
+                    </div>
+                    <div class="text-center space-y-2">
+                        <div class="w-12 h-12 mx-auto bg-green-200 rounded-full flex items-center justify-center text-green-700 text-xl">
+                            📱
+                        </div>
+                        <h3 class="font-semibold text-amber-800">智能下載</h3>
+                        <p class="text-sm text-amber-700">根據需求選擇最適合的格式下載</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 頁腳 -->
+    <footer class="bg-gradient-to-r from-amber-800 to-orange-800 text-white py-8">
+        <div class="container mx-auto px-4 text-center">
+            <div class="mb-4">
+                <h3 class="text-xl font-bold mb-2">🙏 宗教動態貼圖館</h3>
+                <p class="text-amber-100">傳播慈悲與智慧，分享正能量</p>
+            </div>
+            <div class="text-sm text-amber-200">
+                <p>© 2025 宗教動態貼圖館 · 願一切眾生離苦得樂</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 全局變量
+        let allWorks = [];
+        let currentFilter = 'all';
+        let isLoading = false;
+        let githubConfig = null;
+
+        // 頁面載入時初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadGitHubConfig();
+            loadWorks();
+        });
+
+        // 載入GitHub配置
+        function loadGitHubConfig() {
+            try {
+                const saved = localStorage.getItem('githubConfig');
+                if (saved) {
+                    githubConfig = JSON.parse(saved);
+                }
+            } catch (error) {
+                console.error('載入GitHub配置失敗:', error);
+            }
+        }
+
+        // 載入作品數據
+        async function loadWorks() {
+            if (isLoading) return;
+            isLoading = true;
+            
+            showLoadingState();
+            
+            try {
+                // 首先嘗試從GitHub載入
+                const githubWorks = await loadWorksFromGitHub();
+                
+                if (githubWorks && githubWorks.length > 0) {
+                    allWorks = githubWorks;
+                    showSyncStatus('success', `已從GitHub載入 ${githubWorks.length} 個作品`);
+                } else {
+                    // 回退到本地存儲
+                    const localWorks = loadWorksFromLocal();
+                    allWorks = localWorks;
+                    
+                    if (localWorks.length > 0) {
+                        showSyncStatus('warning', `從本地載入 ${localWorks.length} 個作品（GitHub同步失敗）`);
+                    } else {
+                        showSyncStatus('info', '暫無作品，請使用後台管理系統上傳');
+                    }
+                }
+                
+                updateCounts();
+                renderWorks();
+                
+            } catch (error) {
+                console.error('載入作品失敗:', error);
+                showErrorState(error.message);
+            } finally {
+                isLoading = false;
+                hideLoadingState();
+            }
+        }
+
+        // 從GitHub載入作品數據
+        async function loadWorksFromGitHub() {
+            if (!githubConfig || !githubConfig.repo) {
+                return null;
+            }
+
+            try {
+                showSyncStatus('loading', '正在從GitHub載入最新作品...');
+                
+                const response = await fetch(`https://api.github.com/repos/${githubConfig.repo}/contents/works.json`, {
+                    headers: {
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Cache-Control': 'no-cache'
+                    }
+                });
+
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        console.log('works.json 不存在，這是正常的（如果還沒有上傳作品）');
+                        return [];
+                    }
+                    throw new Error(`GitHub API錯誤: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const content = atob(data.content);
+                const worksData = JSON.parse(content);
+
+                if (worksData.works && Array.isArray(worksData.works)) {
+                    // 驗證和清理數據
+                    const validWorks = worksData.works.filter(work => 
+                        work && 
+                        typeof work === 'object' && 
+                        work.id && 
+                        work.title && 
+                        (work.gifUrl || work.webpUrl)
+                    );
+
+                    // 更新本地緩存
+                    localStorage.setItem('uploadedWorks', JSON.stringify(validWorks));
+                    localStorage.setItem('lastGitHubSync', new Date().toISOString());
+
+                    return validWorks;
+                }
+
+                return [];
+            } catch (error) {
+                console.error('從GitHub載入失敗:', error);
+                throw error;
+            }
+        }
+
+        // 從本地存儲載入作品數據
+        function loadWorksFromLocal() {
+            try {
+                const saved = localStorage.getItem('uploadedWorks');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    if (Array.isArray(parsed)) {
+                        return parsed.filter(work => 
+                            work && 
+                            typeof work === 'object' && 
+                            work.id && 
+                            work.title && 
+                            (work.image || work.gifUrl || work.webpUrl)
+                        );
+                    }
+                }
+                return [];
+            } catch (error) {
+                console.error('載入本地作品失敗:', error);
+                return [];
+            }
+        }
+
+        // 顯示載入狀態
+        function showLoadingState() {
+            document.getElementById('loading-state').classList.remove('hidden');
+            document.getElementById('works-container').classList.add('hidden');
+            document.getElementById('empty-state').classList.add('hidden');
+            document.getElementById('error-state').classList.add('hidden');
+        }
+
+        // 隱藏載入狀態
+        function hideLoadingState() {
+            document.getElementById('loading-state').classList.add('hidden');
+        }
+
+        // 顯示同步狀態
+        function showSyncStatus(type, message) {
+            const syncStatus = document.getElementById('sync-status');
+            const syncText = document.getElementById('sync-text');
+            const spinner = syncStatus.querySelector('.loading-spinner');
+            
+            syncText.textContent = message;
+            syncStatus.classList.remove('hidden');
+            
+            // 移除所有狀態類
+            syncStatus.classList.remove('github-sync', 'bg-green-100', 'text-green-700', 'bg-yellow-100', 'text-yellow-700', 'bg-blue-100', 'text-blue-700');
+            
+            switch (type) {
+                case 'loading':
+                    syncStatus.classList.add('github-sync');
+                    spinner.classList.remove('hidden');
+                    break;
+                case 'success':
+                    syncStatus.classList.add('bg-green-100', 'text-green-700');
+                    spinner.classList.add('hidden');
+                    setTimeout(() => syncStatus.classList.add('hidden'), 3000);
+                    break;
+                case 'warning':
+                    syncStatus.classList.add('bg-yellow-100', 'text-yellow-700');
+                    spinner.classList.add('hidden');
+                    setTimeout(() => syncStatus.classList.add('hidden'), 5000);
+                    break;
+                case 'info':
+                    syncStatus.classList.add('bg-blue-100', 'text-blue-700');
+                    spinner.classList.add('hidden');
+                    setTimeout(() => syncStatus.classList.add('hidden'), 3000);
+                    break;
+            }
+        }
+
+        // 顯示錯誤狀態
+        function showErrorState(message) {
+            document.getElementById('error-message').textContent = message;
+            document.getElementById('error-state').classList.remove('hidden');
+            document.getElementById('works-container').classList.add('hidden');
+            document.getElementById('empty-state').classList.add('hidden');
+        }
+
+        // 更新分類計數
+        function updateCounts() {
+            const mantraCount = allWorks.filter(w => w.category === 'mantra').length;
+            const buddhaCount = allWorks.filter(w => w.category === 'buddha').length;
+            
+            document.getElementById('count-all').textContent = allWorks.length;
+            document.getElementById('count-mantra').textContent = mantraCount;
+            document.getElementById('count-buddha').textContent = buddhaCount;
+        }
+
+        // 篩選作品
+        function filterWorks(category) {
+            currentFilter = category;
+            
+            // 更新按鈕狀態
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-gradient-to-r', 'from-amber-500', 'to-orange-500', 'text-white');
+                btn.classList.add('bg-white/70', 'hover:bg-amber-50', 'border', 'border-amber-200');
+            });
+            
+            const activeBtn = document.getElementById(`btn-${category}`);
+            activeBtn.classList.add('active', 'bg-gradient-to-r', 'from-amber-500', 'to-orange-500', 'text-white');
+            activeBtn.classList.remove('bg-white/70', 'hover:bg-amber-50', 'border', 'border-amber-200');
+            
+            // 顯示/隱藏相應區域
+            if (category === 'coming') {
+                document.getElementById('works-section').classList.add('hidden');
+                document.getElementById('coming-section').classList.remove('hidden');
+            } else {
+                document.getElementById('works-section').classList.remove('hidden');
+                document.getElementById('coming-section').classList.add('hidden');
+                renderWorks();
+            }
+        }
+
+        // 渲染作品
+        function renderWorks() {
+            const container = document.getElementById('works-container');
+            const emptyState = document.getElementById('empty-state');
+            const errorState = document.getElementById('error-state');
+            
+            let filteredWorks = allWorks;
+            if (currentFilter !== 'all') {
+                filteredWorks = allWorks.filter(work => work.category === currentFilter);
+            }
+            
+            // 隱藏錯誤狀態
+            errorState.classList.add('hidden');
+            
+            if (filteredWorks.length === 0) {
+                container.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                return;
+            }
+            
+            emptyState.classList.add('hidden');
+            container.classList.remove('hidden');
+            
+            container.innerHTML = filteredWorks.map(work => createWorkCard(work)).join('');
+            
+            // 添加淡入動畫
+            container.querySelectorAll('.work-card').forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.classList.add('fade-in');
+            });
+        }
+
+        // 創建作品卡片
+        function createWorkCard(work) {
+            const imageUrl = work.gifUrl || work.webpUrl || work.image;
+            const hasWebP = work.webpUrl && work.gifUrl;
+            const tags = work.tags || [];
+            const uploadDate = work.uploadDate ? new Date(work.uploadDate).toLocaleDateString('zh-TW') : '';
+            
+            return `
+                <div class="work-card bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300">
+                    <div class="relative mb-4">
+                        <img src="${imageUrl}" alt="${work.title}" class="w-full h-48 object-contain rounded-xl bg-gray-50">
+                        
+                        <!-- 格式標籤 -->
+                        <div class="absolute top-2 right-2 flex gap-1">
+                            ${work.gifUrl ? '<span class="format-badge format-gif">GIF</span>' : ''}
+                            ${work.webpUrl ? '<span class="format-badge format-webp">WebP</span>' : ''}
+                            ${work.source === 'github' ? '<span class="format-badge github-sync"><i class="fab fa-github mr-1"></i>GitHub</span>' : ''}
+                        </div>
+                        
+                        <!-- 智能標籤 -->
+                        ${hasWebP ? '<div class="absolute top-2 left-2"><span class="format-badge smart-badge"><i class="fas fa-magic mr-1"></i>智能</span></div>' : ''}
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-800 mb-1">${work.title}</h3>
+                            ${work.subtitle ? `<p class="text-sm text-gray-600">${work.subtitle}</p>` : ''}
+                        </div>
+                        
+                        ${work.description ? `<p class="text-gray-600 text-sm line-clamp-2">${work.description}</p>` : ''}
+                        
+                        <!-- 標籤 -->
+                        ${tags.length > 0 ? `
+                            <div class="flex flex-wrap gap-1">
+                                ${tags.slice(0, 3).map(tag => `<span class="px-2 py-1 bg-amber-100 text-amber-700 text-xs rounded-full">${tag}</span>`).join('')}
+                                ${tags.length > 3 ? `<span class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">+${tags.length - 3}</span>` : ''}
+                            </div>
+                        ` : ''}
+                        
+                        <!-- 下載按鈕 -->
+                        <div class="flex gap-2">
+                            ${work.gifUrl ? `
+                                <button onclick="downloadImage('${work.gifUrl}', '${work.title}.gif')" class="flex-1 px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-lg hover:from-amber-600 hover:to-orange-600 transition-colors text-sm">
+                                    <i class="fas fa-download mr-1"></i>
+                                    下載 GIF
+                                </button>
+                            ` : ''}
+                            ${work.webpUrl ? `
+                                <button onclick="downloadImage('${work.webpUrl}', '${work.title}.webp')" class="flex-1 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg hover:from-blue-600 hover:to-purple-600 transition-colors text-sm">
+                                    <i class="fas fa-download mr-1"></i>
+                                    下載 WebP
+                                </button>
+                            ` : ''}
+                            ${!work.gifUrl && !work.webpUrl && work.image ? `
+                                <button onclick="downloadImage('${work.image}', '${work.title}')" class="flex-1 px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-lg hover:from-amber-600 hover:to-orange-600 transition-colors text-sm">
+                                    <i class="fas fa-download mr-1"></i>
+                                    下載圖片
+                                </button>
+                            ` : ''}
+                        </div>
+                        
+                        <!-- 上傳日期 -->
+                        ${uploadDate ? `<div class="text-xs text-gray-500 text-center">上傳於 ${uploadDate}</div>` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        // 下載圖片
+        function downloadImage(url, filename) {
+            try {
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = filename;
+                link.target = '_blank';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } catch (error) {
+                console.error('下載失敗:', error);
+                // 如果下載失敗，嘗試在新窗口打開
+                window.open(url, '_blank');
+            }
+        }
+
+        // 手動重新載入
+        function reloadWorks() {
+            allWorks = [];
+            loadWorks();
+        }
+
+        // 定期同步（每5分鐘檢查一次）
+        setInterval(() => {
+            if (!isLoading && githubConfig && githubConfig.repo) {
+                loadWorksFromGitHub().then(works => {
+                    if (works && works.length !== allWorks.length) {
+                        allWorks = works;
+                        updateCounts();
+                        renderWorks();
+                        showSyncStatus('success', '已自動同步最新作品');
+                    }
+                }).catch(error => {
+                    console.log('自動同步失敗:', error);
+                });
+            }
+        }, 5 * 60 * 1000); // 5分鐘
+    </script>
+</body>
+</html>

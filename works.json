@@ -1,0 +1,29 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2025-08-17T07:55:00.000Z",
+  "totalWorks": 1,
+  "works": [
+    {
+      "id": "demo-work-001",
+      "title": "嗡古魯蓮生悉地吽",
+      "subtitle": "蓮花生大士心咒",
+      "description": "蓮花生大士心咒的動態展示，八字連續循環，具有加持和淨化的功效。適合修行時觀想使用，也可在社群媒體分享正能量。",
+      "category": "mantra",
+      "tags": ["蓮花生大士", "心咒", "八字真言", "藏傳佛教", "修行", "加持"],
+      "gifUrl": "https://raw.githubusercontent.com/您的用戶名/freedance-video-gallery/main/images/demo-work-001.gif",
+      "webpUrl": "https://raw.githubusercontent.com/您的用戶名/freedance-video-gallery/main/images/demo-work-001.webp",
+      "uploadDate": "2025-08-17T07:55:00.000Z",
+      "source": "github",
+      "fileSize": {
+        "gif": "2.5MB",
+        "webp": "0.8MB"
+      },
+      "dimensions": {
+        "width": 400,
+        "height": 400
+      },
+      "features": ["透明背景", "循環動畫", "高清品質", "社群適用"]
+    }
+  ]
+}
+
